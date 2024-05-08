@@ -13,25 +13,39 @@ use std::{
 use timer_future::TimerFuture;
 
 fn main() {
-  let (executor, spawner) = new_executor_and_spawner();
+    let (executor, spawner) = new_executor_and_spawner();
 
-  // Spawn a task to print before and after waiting on a timer.
-  spawner.spawn(async {
-      println!("Patrick's Komputer: howdy!");
-      // Wait for our timer future to complete after two seconds.
-      TimerFuture::new(Duration::new(2, 0)).await;
-      println!("Patrick's Komputer: done!");
-  });
+    // Spawn a task to print before and after waiting on a timer.
+    spawner.spawn(async {
+        println!("Patrick's Komputer: howdy!");
+        // Wait for our timer future to complete after two seconds.
+        TimerFuture::new(Duration::new(2, 0)).await;
+        println!("Patrick's Komputer: done!");
+    });
 
-  println!("Patrick's Komputer: hey hey");
+    spawner.spawn(async {
+        println!("Patrick's Komputer: howdy2!");
+        // Wait for our timer future to complete after two seconds.
+        TimerFuture::new(Duration::new(2, 0)).await;
+        println!("Patrick's Komputer: done2!");
+    });
 
-  // Drop the spawner so that our executor knows it is finished and won't
-  // receive more incoming tasks to run.
-  drop(spawner);
+    spawner.spawn(async {
+        println!("Patrick's Komputer: howdy3!");
+        // Wait for our timer future to complete after two seconds.
+        TimerFuture::new(Duration::new(2, 0)).await;
+        println!("Patrick's Komputer: done3!");
+    });
 
-  // Run the executor until the task queue is empty.
-  // This will print "howdy!", pause, and then print "done!".
-  executor.run();
+    println!("Patrick's Komputer: hey hey");
+
+    // Drop the spawner so that our executor knows it is finished and won't
+    // receive more incoming tasks to run.
+    // drop(spawner);
+
+    // Run the executor until the task queue is empty.
+    // This will print "howdy!", pause, and then print "done!".
+    executor.run();
 }
 
 /// Task executor that receives tasks off of a channel and runs them.
