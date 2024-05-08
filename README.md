@@ -1,0 +1,2 @@
+![alt text](image.png)
+The output order is due to the asynchronous nature of the tasks. The line “Patrick’s Komputer: hey hey” is printed immediately because it’s a synchronous operation. The other lines are printed later by an asynchronous task that was queued to run after the synchronous operations. This task prints “Patrick’s Komputer: howdy!”, waits for 2 seconds, and then prints “Patrick’s Komputer: done!”. So, the output order is not the same as the order in the code.
